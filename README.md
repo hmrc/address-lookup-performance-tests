@@ -1,5 +1,5 @@
 
-performance-testing
+Address lookup performance tests
 ===================
 
 Performance test repository for address-lookup service
