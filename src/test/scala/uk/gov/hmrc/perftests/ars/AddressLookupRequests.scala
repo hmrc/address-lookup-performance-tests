@@ -12,9 +12,9 @@ object AddressLookupRequests extends ServicesConfiguration {
   val lookupAddressWithFilter =
     http("Get address")
       .get(s"$baseUrl/v2/uk/addresses")
-      .queryParam("postcode", "${postcode}")
+      .queryParam("postcode", s"$${postcode}")
       .header("User-Agent", "address-lookup-frontend")
-      .check(substring("${postcode}"))
+      .check(substring(s"$${postcode}"))
       .check(status.is(200))
 
 }
