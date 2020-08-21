@@ -16,16 +16,16 @@
 
 package uk.gov.hmrc.perftests.ars
 
-import uk.gov.hmrc.performance.conf.ServicesConfiguration
-
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
+import io.gatling.http.request.builder.HttpRequestBuilder
+import uk.gov.hmrc.performance.conf.ServicesConfiguration
 
 object AddressLookupRequests extends ServicesConfiguration {
 
-  val baseUrl = baseUrlFor("address-lookup-service")
+  val baseUrl: String = baseUrlFor("address-lookup-service")
 
-  val lookupAddressWithFilter =
+  val lookupAddressWithFilter: HttpRequestBuilder =
     http("Get address")
       .get(s"$baseUrl/v2/uk/addresses")
       .queryParam("postcode", s"$${postcode}")

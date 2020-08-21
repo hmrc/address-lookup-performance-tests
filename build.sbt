@@ -1,6 +1,3 @@
-val appName = "address-lookup-performance-tests"
-val appVersion = "0.1.0-SNAPSHOT"
-
 lazy val root = (project in file("."))
   .enablePlugins(GatlingPlugin)
   .enablePlugins(CorePlugin)
@@ -9,10 +6,10 @@ lazy val root = (project in file("."))
   .enablePlugins(SbtAutoBuildPlugin)
   .settings(
     organization := "uk.gov.hmrc",
-    name := appName,
-    version := appVersion,
+    name := "address-lookup-performance-tests",
+    version := "0.1.0-SNAPSHOT",
     scalaVersion := "2.12.12",
-    scalacOptions ++= Seq("-feature"),
+    scalacOptions ++= Seq("-feature", "-language:implicitConversions", "-language:postfixOps"),
     retrieveManaged := true,
     initialCommands in console := "import uk.gov.hmrc._",
     parallelExecution in Test := false,

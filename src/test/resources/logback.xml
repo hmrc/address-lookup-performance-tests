@@ -2,19 +2,18 @@
 <configuration>
 
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <immediateFlush>false</immediateFlush>
         <encoder>
             <pattern>%d{HH:mm:ss.SSS} [%-5level] %logger{15} - %msg%n%rEx</pattern>
-            <immediateFlush>false</immediateFlush>
         </encoder>
     </appender>
 
-    <!-- Uncomment for logging ALL HTTP request and responses -->
-<!--     <logger name="io.gatling.http" level="TRACE" />-->
-    <!-- Uncomment for logging ONLY FAILED HTTP request and responses -->
-    <!--<logger name="io.gatling.http" level="DEBUG" />-->
+    <!-- Uncomment and set to DEBUG to log ALL failing HTTP requests and responses -->
+    <!-- Uncomment and set to TRACE to log ALL HTTP requests and responses -->
+    <!-- <logger name="io.gatling.http" level="TRACE"/>-->
 
     <root level="WARN">
-        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="CONSOLE"/>
     </root>
 
 </configuration>
