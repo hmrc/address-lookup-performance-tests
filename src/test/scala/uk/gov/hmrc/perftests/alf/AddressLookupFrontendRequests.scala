@@ -30,12 +30,14 @@ object AddressLookupFrontendRequests extends ServicesConfiguration {
   val minimalConfigMap = Map(
     "journeyConfig" ->
       s"""
-                          { "version" : 2,
-                              "options" : {
-                                  "continueUrl" : "This will be ignored"
-                              },
-                          "labels" : {}}
-                          """)
+         |{
+         |  "version" : 2,
+         |  "options" : {
+         |    "continueUrl" : "This will be ignored"
+         |  },
+         |  "labels" : { }
+         |}
+         |""".stripMargin)
 
   val manualAddress = Map("line1" -> "Test street", "line2" -> "Somewhere test", "line3" -> "", "town" -> "Test town", "postcode" -> postcode, "countryCode" -> "GB")
 
