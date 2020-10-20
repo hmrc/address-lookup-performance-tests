@@ -7,7 +7,7 @@ lazy val root = (project in file("."))
   .settings(
     organization := "uk.gov.hmrc",
     name := "address-lookup-performance-tests",
-    version := "0.1.0-SNAPSHOT",
+    version := "0.1.0",
     scalaVersion := "2.12.12",
     scalacOptions ++= Seq("-feature", "-language:implicitConversions", "-language:postfixOps"),
     retrieveManaged := true,
