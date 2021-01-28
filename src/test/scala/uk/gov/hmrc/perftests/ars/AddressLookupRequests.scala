@@ -40,6 +40,6 @@ object AddressLookupRequests extends ServicesConfiguration {
       .queryParam("town", s"$${town}")
       .header("User-Agent", "address-lookup-frontend")
       .check(status.is(200))
-      .check(jsonPath("$.length()").count.is(session => session("result-count").as[String].toInt))
+      .check(jsonPath("$[*]").count.is(session => session("result-count").as[String].toInt))
 
 }
