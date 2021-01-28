@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,5 +32,14 @@ object AddressLookupRequests extends ServicesConfiguration {
       .header("User-Agent", "address-lookup-frontend")
       .check(substring(s"$${postcode}"))
       .check(status.is(200))
+
+  val fuzzyAddressLookup: HttpRequestBuilder =
+    http("Get address")
+      .get(s"$baseUrl/v2/uk/addresses")
+      .queryParam("line1", s"$${line-one}")
+      .queryParam("town", s"$${town}")
+      .header("User-Agent", "address-lookup-frontend")
+      .check(status.is(200))
+      .check(jsonPath("$..results").count.is(session => session("result-count").as[String].toInt))
 
 }

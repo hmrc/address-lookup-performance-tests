@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,11 @@ import uk.gov.hmrc.perftests.ars.AddressLookupRequests._
 
 class AddressLookupSimulation extends PerformanceTestRunner {
 
-  setup("lookup", "Lookup address with filter") withRequests lookupAddressWithFilter
+  setup("api-lookup-postcode", "Lookup address with postcode and filter") withRequests
+    lookupAddressWithFilter
+
+  setup("api-lookup-fuzzy", "Lookup address using fuzzy matching") withRequests
+    fuzzyAddressLookup
 
   setup("lookup-frontend-manual", "Lookup address frontend (Manual lookup)") withRequests(
     lookupAddressFrontendGetCsrfToken,
