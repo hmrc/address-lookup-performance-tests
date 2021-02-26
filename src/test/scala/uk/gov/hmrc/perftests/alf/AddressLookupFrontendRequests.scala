@@ -42,7 +42,6 @@ object AddressLookupFrontendRequests extends ServicesConfiguration {
 
   val manualAddress = Map("line1" -> "Test street", "line2" -> "Somewhere test", "line3" -> "", "town" -> "Test town", "postcode" -> postcode, "countryCode" -> "GB")
 
-
   val lookupAddressFrontendGetCsrfToken: HttpRequestBuilder =
     http("Get CSRF Token")
       .get(s"$baseUrl/lookup-address/test-only/v2/test-setup")
@@ -61,6 +60,8 @@ object AddressLookupFrontendRequests extends ServicesConfiguration {
       .get(s"$${alfBaseURL}/lookup")
       .check(status.is(200))
 
+  //FIXME should probably log number of addresses found here.
+  //FIXME It possible there is only a single address for a postcode so the selection radio buttons will not display
   val lookupAddressFrontendSelectAddress: HttpRequestBuilder =
     http("Select address")
       .get(s"$${alfBaseURL}/select?csrfToken=$${csrfToken}&postcode=$${postcode}")
