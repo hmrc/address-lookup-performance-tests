@@ -16,14 +16,19 @@
 
 package uk.gov.hmrc.perftests.helpers
 
+import io.gatling.commons.stats.KO
 import io.gatling.http.request.ExtraInfo
 
 case class LogHelper() {
 
   //TODO This will break in Gatling 3.x.x
   //TODO Instead of using a `extraInfoExtractor` we will need to use a `.exec` instead
-  def addExtraInfoToSimulationLog(extraInfo: ExtraInfo): String = {
-    s",URL: ${extraInfo.request.getUrl}, Response: ${extraInfo.response.body.string}"
+  def addExtraInfoToSimulationLog(extraInfo: ExtraInfo): List[String] = {
+    extraInfo.status match {
+      case KO => List(s",URL: ${extraInfo.request.getUrl}, Response: ${extraInfo.response.body.string}")
+      case _ => Nil
+    }
+
   }
 
 }

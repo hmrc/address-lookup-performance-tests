@@ -48,7 +48,7 @@ object AddressLookupFrontendRequests extends ServicesConfiguration {
       .get(s"$baseUrl/lookup-address/test-only/v2/test-setup")
       .check(css("input[name=csrfToken]", "value").saveAs("csrfToken"))
       .check(status.is(200))
-      .extraInfoExtractor { extraInfo => List(LogHelper().addExtraInfoToSimulationLog(extraInfo)) }
+      .extraInfoExtractor { extraInfo => LogHelper().addExtraInfoToSimulationLog(extraInfo)}
 
   val lookupAddressFrontendStartJourney: HttpRequestBuilder =
     http("Start journey")
@@ -56,13 +56,13 @@ object AddressLookupFrontendRequests extends ServicesConfiguration {
       .formParamMap(defaultConfigurationMap ++ Map("csrfToken" -> s"$${csrfToken}"))
       .check(headerRegex("Location", "(.*)/lookup").saveAs("alfBaseURL"))
       .check(status.is(303))
-      .extraInfoExtractor { extraInfo => List(LogHelper().addExtraInfoToSimulationLog(extraInfo)) }
+      .extraInfoExtractor { extraInfo => LogHelper().addExtraInfoToSimulationLog(extraInfo)}
 
   val lookupAddressFrontendLookupPage: HttpRequestBuilder =
     http("Lookup page")
       .get(s"$${alfBaseURL}/lookup")
       .check(status.is(200))
-      .extraInfoExtractor { extraInfo => List(LogHelper().addExtraInfoToSimulationLog(extraInfo)) }
+      .extraInfoExtractor { extraInfo => LogHelper().addExtraInfoToSimulationLog(extraInfo)}
 
   //FIXME should probably log number of addresses found here.
   //FIXME It possible there is only a single address for a postcode so the selection radio buttons will not display
@@ -71,40 +71,40 @@ object AddressLookupFrontendRequests extends ServicesConfiguration {
     .get(s"$${alfBaseURL}/select?csrfToken=$${csrfToken}&postcode=$${postcode}")
     .check(css("input[id=addressId]", "value").saveAs("addressId"))
     .check(status.is(200))
-    .extraInfoExtractor { extraInfo => List(LogHelper().addExtraInfoToSimulationLog(extraInfo)) }
+    .extraInfoExtractor { extraInfo => LogHelper().addExtraInfoToSimulationLog(extraInfo)}
 
   val lookupAddressFrontendManualAddress: HttpRequestBuilder =
     http("Manually enter address")
       .get(s"$${alfBaseURL}/edit")
       .check(status.is(200))
-      .extraInfoExtractor { extraInfo => List(LogHelper().addExtraInfoToSimulationLog(extraInfo)) }
+      .extraInfoExtractor { extraInfo => LogHelper().addExtraInfoToSimulationLog(extraInfo)}
 
   val lookupAddressFrontendSubmitManualAddress: HttpRequestBuilder =
     http("Submit manually entered address")
       .post(s"$${alfBaseURL}/edit?uk=false")
       .formParamMap(manualAddress ++ Map("csrfToken" -> s"$${csrfToken}"))
       .check(status.is(303))
-      .extraInfoExtractor { extraInfo => List(LogHelper().addExtraInfoToSimulationLog(extraInfo)) }
+      .extraInfoExtractor { extraInfo => LogHelper().addExtraInfoToSimulationLog(extraInfo)}
 
   val lookupAddressFrontendSelectFirstAddress: HttpRequestBuilder =
     http("Select first address")
       .post(s"$${alfBaseURL}/select?postcode=$${postcode}")
       .formParamMap(Map("addressId" -> s"$${addressId}", "csrfToken" -> s"$${csrfToken}"))
       .check(status.is(303))
-      .extraInfoExtractor { extraInfo => List(LogHelper().addExtraInfoToSimulationLog(extraInfo)) }
+      .extraInfoExtractor { extraInfo => LogHelper().addExtraInfoToSimulationLog(extraInfo)}
 
   val lookupAddressFrontendConfirmAddress: HttpRequestBuilder =
     http("Confirm selected address")
       .post(s"$${alfBaseURL}/confirm")
       .formParamMap(Map("addressId" -> s"$${addressId}", "csrfToken" -> s"$${csrfToken}"))
       .check(status.is(303))
-      .extraInfoExtractor { extraInfo => List(LogHelper().addExtraInfoToSimulationLog(extraInfo)) }
+      .extraInfoExtractor { extraInfo => LogHelper().addExtraInfoToSimulationLog(extraInfo)}
 
   val lookupAddressFrontendConfirmManualAddress: HttpRequestBuilder =
     http("Confirm manually entered address")
       .post(s"$${alfBaseURL}/confirm")
       .formParamMap(Map("csrfToken" -> s"$${csrfToken}"))
       .check(status.is(303))
-      .extraInfoExtractor { extraInfo => List(LogHelper().addExtraInfoToSimulationLog(extraInfo)) }
+      .extraInfoExtractor { extraInfo => LogHelper().addExtraInfoToSimulationLog(extraInfo)}
 
 }

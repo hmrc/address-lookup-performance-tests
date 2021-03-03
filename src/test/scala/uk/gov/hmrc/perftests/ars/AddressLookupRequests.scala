@@ -33,7 +33,7 @@ object AddressLookupRequests extends ServicesConfiguration {
       .header("User-Agent", "address-lookup-frontend")
       .check(substring(s"$${postcode}"))
       .check(status.is(200))
-      .extraInfoExtractor { extraInfo => List(LogHelper().addExtraInfoToSimulationLog(extraInfo)) }
+      .extraInfoExtractor { extraInfo => LogHelper().addExtraInfoToSimulationLog(extraInfo)}
 
   val fuzzyAddressLookup: HttpRequestBuilder =
     http("Get address")
@@ -43,5 +43,5 @@ object AddressLookupRequests extends ServicesConfiguration {
       .header("User-Agent", "address-lookup-frontend")
       .check(status.is(200))
       .check(jsonPath("$[*]").count.is(session => session("result-count").as[String].toInt))
-      .extraInfoExtractor { extraInfo => List(LogHelper().addExtraInfoToSimulationLog(extraInfo)) }
+      .extraInfoExtractor { extraInfo => LogHelper().addExtraInfoToSimulationLog(extraInfo)}
 }
