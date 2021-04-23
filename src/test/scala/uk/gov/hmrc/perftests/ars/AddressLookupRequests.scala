@@ -20,7 +20,6 @@ import io.gatling.core.Predef._
 import io.gatling.http.Predef._
 import io.gatling.http.request.builder.HttpRequestBuilder
 import uk.gov.hmrc.performance.conf.ServicesConfiguration
-import uk.gov.hmrc.perftests.helpers.LogHelper
 
 object AddressLookupRequests extends ServicesConfiguration {
 
@@ -30,18 +29,16 @@ object AddressLookupRequests extends ServicesConfiguration {
     http("Get address")
       .get(s"$baseUrl/v2/uk/addresses")
       .queryParam("postcode", s"$${postcode}")
-      .header("User-Agent", "address-lookup-frontend")
+      .header(HttpHeaderNames.UserAgent, "address-lookup-frontend")
       .check(substring(s"$${postcode}"))
       .check(status.is(200))
-      .extraInfoExtractor { extraInfo => LogHelper().addExtraInfoToSimulationLog(extraInfo)}
 
   val fuzzyAddressLookup: HttpRequestBuilder =
     http("Get address")
       .get(s"$baseUrl/v2/uk/addresses")
       .queryParam("line1", s"$${line-one}")
       .queryParam("town", s"$${town}")
-      .header("User-Agent", "address-lookup-frontend")
+      .header(HttpHeaderNames.UserAgent, "address-lookup-frontend")
       .check(status.is(200))
       .check(jsonPath("$[*]").count.is(session => session("result-count").as[String].toInt))
-      .extraInfoExtractor { extraInfo => LogHelper().addExtraInfoToSimulationLog(extraInfo)}
 }
