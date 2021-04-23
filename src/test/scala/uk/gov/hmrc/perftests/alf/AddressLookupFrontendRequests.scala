@@ -66,7 +66,7 @@ object AddressLookupFrontendRequests extends ServicesConfiguration {
   http("Select address")
     .get(s"$${alfBaseURL}/select?csrfToken=$${csrfToken}&postcode=$${postcode}")
     .check(css("input[id=addressId]", "value").saveAs("addressId"))
-    .check(status.is(200))
+    .check(status.in(200 to 303))
 
   val lookupAddressFrontendManualAddress: HttpRequestBuilder =
     http("Manually enter address")
