@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.perftests.ars
 
-import io.gatling.core.Predef.{exec, scenario}
+import io.gatling.core.Predef.exec
 import uk.gov.hmrc.performance.simulation.PerformanceTestRunner
 import uk.gov.hmrc.perftests.alf.AddressLookupFrontendRequests._
 import uk.gov.hmrc.perftests.ars.AddressLookupRequests._
@@ -38,15 +38,16 @@ class AddressLookupSimulation extends PerformanceTestRunner {
     lookupAddressFrontendConfirmManualAddress
   )
 
-  scenario("lookup-frontend")
-    .exec(lookupAddressFrontendGetCsrfToken)
-    .exec(lookupAddressFrontendStartJourney)
-    .exec(lookupAddressFrontendLookupPage)
-    .exec(lookupAddressFrontendSelectAddress)
-    .doIf(session => session("selectStatus").validate[Int].map(status => status == 200)) {
-      exec(lookupAddressFrontendSelectFirstAddress)
-    }
-    .exec(lookupAddressFrontendConfirmAddress)
+  setup("lookup-frontend", "Lookup address frontend") withActions {
+    exec(lookupAddressFrontendGetCsrfToken)
+      .exec(lookupAddressFrontendStartJourney)
+      .exec(lookupAddressFrontendLookupPage)
+      .exec(lookupAddressFrontendSelectAddress)
+      .doIf(session => session("selectStatus").validate[Int].map(status => status == 200)) {
+        exec(lookupAddressFrontendSelectFirstAddress)
+      }
+      .exec(lookupAddressFrontendConfirmAddress)
+  }.actionBuilders.head
 
   runSimulation()
 }
