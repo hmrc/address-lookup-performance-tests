@@ -38,16 +38,22 @@ class AddressLookupSimulation extends PerformanceTestRunner {
     lookupAddressFrontendConfirmManualAddress
   )
 
-  setup("lookup-frontend", "Lookup address frontend") withActions {
-    exec(lookupAddressFrontendGetCsrfToken)
-    exec(lookupAddressFrontendStartJourney)
-    exec(lookupAddressFrontendLookupPage)
-    exec(lookupAddressFrontendSelectAddress)
-    .doIf(session => session("selectStatus").validate[Int].map(status => status == 200)) {
-      exec(lookupAddressFrontendSelectFirstAddress)
-    }
-    exec(lookupAddressFrontendConfirmAddress)
+  setup("start-lookup-frontend", "Start lookup address frontend") withRequests(
+    lookupAddressFrontendGetCsrfToken,
+    lookupAddressFrontendStartJourney,
+    lookupAddressFrontendLookupPage,
+    lookupAddressFrontendSelectAddress,
+  )
+
+  setup("select-first-address", "Lookup address frontend") withActions {
+    exec()
+      .doIf(session => session("selectStatus").validate[Int].map(status => status == 200)) {
+        exec(lookupAddressFrontendSelectFirstAddress)
+      }
   }.actionBuilders.head
+
+  setup("finish-lookup-frontend", "Finish lookup address frontend") withRequests
+    lookupAddressFrontendConfirmAddress
 
   runSimulation()
 }
