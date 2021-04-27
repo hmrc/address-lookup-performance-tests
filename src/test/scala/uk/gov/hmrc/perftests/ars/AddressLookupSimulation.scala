@@ -40,13 +40,13 @@ class AddressLookupSimulation extends PerformanceTestRunner {
 
   setup("lookup-frontend", "Lookup address frontend") withActions {
     exec(lookupAddressFrontendGetCsrfToken)
-      .exec(lookupAddressFrontendStartJourney)
-      .exec(lookupAddressFrontendLookupPage)
-      .exec(lookupAddressFrontendSelectAddress)
-      .doIf(session => session("selectStatus").validate[Int].map(status => status == 200)) {
-        exec(lookupAddressFrontendSelectFirstAddress)
-      }
-      .exec(lookupAddressFrontendConfirmAddress)
+    exec(lookupAddressFrontendStartJourney)
+    exec(lookupAddressFrontendLookupPage)
+    exec(lookupAddressFrontendSelectAddress)
+    .doIf(session => session("selectStatus").validate[Int].map(status => status == 200)) {
+      exec(lookupAddressFrontendSelectFirstAddress)
+    }
+    exec(lookupAddressFrontendConfirmAddress)
   }.actionBuilders.head
 
   runSimulation()
