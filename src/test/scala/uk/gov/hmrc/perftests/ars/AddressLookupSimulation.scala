@@ -47,8 +47,8 @@ class AddressLookupSimulation extends PerformanceTestRunner {
   setup("select-first-address", "Lookup address frontend") withActions {
     exec()
       .doIf(session => session("lookupStatus").validate[Int].map(status => status == 200)) {
-        exec(lookupAddressFrontendSelectAddress)
-        exec(lookupAddressFrontendSelectFirstAddress)
+        exec(lookupAddressFrontendSelectAddress).
+          .exec(lookupAddressFrontendSelectFirstAddress)
       }
   }.actionBuilders.head
 
