@@ -58,13 +58,19 @@ object AddressLookupFrontendRequests extends ServicesConfiguration {
   val lookupAddressFrontendLookupPage: HttpRequestBuilder =
     http("Lookup page")
       .get(s"$${alfBaseURL}/lookup")
-      .check(status.is(200))
+      .check(status.in(200, 303).saveAs("lookupStatus"))
 
   val lookupAddressFrontendSelectAddress: HttpRequestBuilder =
     http("Select address")
       .get(s"$${alfBaseURL}/select?csrfToken=$${csrfToken}&postcode=$${postcode}")
       .check(css("input[id=addressId]", "value").saveAs("addressId"))
-      .check(status.in(200, 303).saveAs("selectStatus"))
+      .check(status.is(200))
+
+  val lookupAddressFrontendSelectFirstAddress: HttpRequestBuilder =
+    http("Select first address")
+      .post(s"$${alfBaseURL}/select?postcode=$${postcode}")
+      .formParamMap(Map("addressId" -> s"$${addressId}", "csrfToken" -> s"$${csrfToken}"))
+      .check(status.is(303))
 
   val lookupAddressFrontendManualAddress: HttpRequestBuilder =
     http("Manually enter address")
@@ -75,12 +81,6 @@ object AddressLookupFrontendRequests extends ServicesConfiguration {
     http("Submit manually entered address")
       .post(s"$${alfBaseURL}/edit?uk=false")
       .formParamMap(manualAddress ++ Map("csrfToken" -> s"$${csrfToken}"))
-      .check(status.is(303))
-
-  val lookupAddressFrontendSelectFirstAddress: HttpRequestBuilder =
-    http("Select first address")
-      .post(s"$${alfBaseURL}/select?postcode=$${postcode}")
-      .formParamMap(Map("addressId" -> s"$${addressId}", "csrfToken" -> s"$${csrfToken}"))
       .check(status.is(303))
 
   val lookupAddressFrontendConfirmAddress: HttpRequestBuilder =

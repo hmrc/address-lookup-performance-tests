@@ -42,12 +42,12 @@ class AddressLookupSimulation extends PerformanceTestRunner {
     lookupAddressFrontendGetCsrfToken,
     lookupAddressFrontendStartJourney,
     lookupAddressFrontendLookupPage,
-    lookupAddressFrontendSelectAddress,
   )
 
   setup("select-first-address", "Lookup address frontend") withActions {
     exec()
-      .doIf(session => session("selectStatus").validate[Int].map(status => status == 200)) {
+      .doIf(session => session("lookupStatus").validate[Int].map(status => status == 200)) {
+        exec(lookupAddressFrontendSelectAddress)
         exec(lookupAddressFrontendSelectFirstAddress)
       }
   }.actionBuilders.head
