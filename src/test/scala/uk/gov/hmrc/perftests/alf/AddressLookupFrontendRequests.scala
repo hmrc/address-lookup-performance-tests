@@ -64,8 +64,11 @@ object AddressLookupFrontendRequests extends ServicesConfiguration {
     http("Select address")
       .get(s"$${alfBaseURL}/select?csrfToken=$${csrfToken}&postcode=$${postcode}")
       .check(status.toString match {
-        case "200" => css("input[id=addressId]", "value").saveAs("addressId")
-        case "303" => status.is(303)
+        case "200" => {
+          css("input[id=addressId]", "value").saveAs("addressId")
+          status.is(200).saveAs("lookupStatus")
+        }
+        case "303" => status.is(303).saveAs("lookupStatus")
         case _ => status.is(200) //Trigger failure due to unexpected response code
       })
 
