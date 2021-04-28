@@ -58,13 +58,16 @@ object AddressLookupFrontendRequests extends ServicesConfiguration {
   val lookupAddressFrontendLookupPage: HttpRequestBuilder =
     http("Lookup page")
       .get(s"$${alfBaseURL}/lookup")
-      .check(status.in(200, 303).saveAs("lookupStatus"))
+      .check(status.is(200))
 
-  val lookupAddressFrontendSelectAddress: HttpRequestBuilder =
+  val lookupAddressFrontendSearchForPostcode: HttpRequestBuilder =
     http("Select address")
       .get(s"$${alfBaseURL}/select?csrfToken=$${csrfToken}&postcode=$${postcode}")
-      .check(status.is(200))
-      .check(css("input[id=addressId]", "value").saveAs("addressId"))
+      .check(status.toString match {
+        case "200" => css("input[id=addressId]", "value").saveAs("addressId")
+        case "303" => status.is(303)
+        case _ => status.is(200) //Trigger failure due to unexpected response code
+      })
 
   val lookupAddressFrontendSelectFirstAddress: HttpRequestBuilder =
     http("Select first address")
