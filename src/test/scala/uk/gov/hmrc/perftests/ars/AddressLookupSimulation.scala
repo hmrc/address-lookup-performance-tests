@@ -16,9 +16,8 @@
 
 package uk.gov.hmrc.perftests.ars
 
-import io.gatling.core.Predef.exec
 import uk.gov.hmrc.performance.simulation.PerformanceTestRunner
-import uk.gov.hmrc.perftests.alf.AddressLookupFrontendRequests._
+import uk.gov.hmrc.perftests.alf.AddressLookupFrontendRequests.{lookupAddressFrontendSelectFirstAddress, _}
 import uk.gov.hmrc.perftests.ars.AddressLookupRequests._
 
 class AddressLookupSimulation extends PerformanceTestRunner {
@@ -35,24 +34,18 @@ class AddressLookupSimulation extends PerformanceTestRunner {
     lookupAddressFrontendLookupPage,
     lookupAddressFrontendManualAddress,
     lookupAddressFrontendSubmitManualAddress,
-    lookupAddressFrontendConfirmManualAddress
-  )
-
-  setup("start-lookup-frontend", "Start lookup address frontend") withRequests(
-    lookupAddressFrontendGetCsrfToken,
-    lookupAddressFrontendStartJourney,
-    lookupAddressFrontendLookupPage,
-  )
-
-  setup("select-first-address", "Lookup address frontend") withActions {
-    exec(lookupAddressFrontendSearchForPostcode)
-      .doIf(session => session("lookupStatus").validate[Int].map(status => status == 200)) {
-        exec(lookupAddressFrontendSelectFirstAddress)
-      }
-  }.actionBuilders.head
-
-  setup("finish-lookup-frontend", "Finish lookup address frontend") withRequests
     lookupAddressFrontendConfirmAddress
+  )
+
+  setup("lookup-frontend", "Lookup address frontend (Postcode search)")
+    .withRequests(
+      lookupAddressFrontendGetCsrfToken,
+      lookupAddressFrontendStartJourney,
+      lookupAddressFrontendLookupPage,
+      lookupAddressFrontendSearchForPostcode
+    )
+    .withActions(lookupAddressFrontendSelectFirstAddress.actionBuilders: _*)
+    .withRequests(lookupAddressFrontendConfirmAddress)
 
   runSimulation()
 }
