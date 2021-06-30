@@ -21,7 +21,7 @@ import io.gatling.http.Predef._
 import io.gatling.http.request.builder.HttpRequestBuilder
 import uk.gov.hmrc.performance.conf.ServicesConfiguration
 
-object AddressLookupRequests extends ServicesConfiguration {
+object AddressLookupRequestsGet extends ServicesConfiguration {
 
   val baseUrl: String = baseUrlFor("address-lookup-service")
 

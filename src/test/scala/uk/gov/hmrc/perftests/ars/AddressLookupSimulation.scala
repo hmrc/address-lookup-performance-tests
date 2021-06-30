@@ -18,15 +18,16 @@ package uk.gov.hmrc.perftests.ars
 
 import uk.gov.hmrc.performance.simulation.PerformanceTestRunner
 import uk.gov.hmrc.perftests.alf.AddressLookupFrontendRequests.{lookupAddressFrontendSelectFirstAddress, _}
-import uk.gov.hmrc.perftests.ars.AddressLookupRequests._
 
 class AddressLookupSimulation extends PerformanceTestRunner {
 
-  setup("api-lookup-postcode", "Lookup address with postcode and filter") withRequests
-    lookupAddressWithFilter
+  setup("api-lookup-postcode", "Lookup address with postcode and filter") withRequests(
+    AddressLookupRequestsGet.lookupAddressWithFilter,
+    AddressLookupRequestsPost.lookupAddressWithFilter
+  )
 
   setup("api-lookup-fuzzy", "Lookup address using fuzzy matching") withRequests
-    fuzzyAddressLookup
+    AddressLookupRequestsGet.fuzzyAddressLookup
 
   setup("lookup-frontend-manual", "Lookup address frontend (Manual lookup)") withRequests(
     lookupAddressFrontendGetCsrfToken,
