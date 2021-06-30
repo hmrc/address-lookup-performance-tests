@@ -26,7 +26,7 @@ object AddressLookupRequestsGet extends ServicesConfiguration {
   val baseUrl: String = baseUrlFor("address-lookup-service")
 
   val lookupAddressWithFilter: HttpRequestBuilder =
-    http("Get address")
+    http("GET - Search for address using postcode")
       .get(s"$baseUrl/v2/uk/addresses")
       .queryParam("postcode", s"$${postcode}")
       .header(HttpHeaderNames.UserAgent, "address-lookup-frontend")
@@ -34,7 +34,7 @@ object AddressLookupRequestsGet extends ServicesConfiguration {
       .check(status.is(200))
 
   val fuzzyAddressLookup: HttpRequestBuilder =
-    http("Get address")
+    http("GET - Search for address without postcode")
       .get(s"$baseUrl/v2/uk/addresses")
       .queryParam("line1", s"$${line-one}")
       .queryParam("town", s"$${town}")

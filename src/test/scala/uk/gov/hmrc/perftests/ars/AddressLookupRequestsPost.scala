@@ -27,8 +27,9 @@ object AddressLookupRequestsPost extends ServicesConfiguration {
   val baseUrl: String = baseUrlFor("address-lookup-service")
 
   val lookupAddressWithFilter: HttpRequestBuilder =
-    http("Get address")
+    http("POST - Search for address using postcode")
       .post(s"$baseUrl/lookup")
+      .header(HttpHeaderNames.ContentType, "application/json")
       .body(StringBody(
         LookupRequest(postcode = Some(s"$${postcode}")).asJsonString()
       ))
