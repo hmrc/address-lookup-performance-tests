@@ -20,7 +20,7 @@ import io.gatling.core.Predef._
 import io.gatling.http.Predef._
 import io.gatling.http.request.builder.HttpRequestBuilder
 import uk.gov.hmrc.performance.conf.ServicesConfiguration
-import uk.gov.hmrc.perftests.ars.models.LookupRequest
+import uk.gov.hmrc.perftests.ars.models.{LookupPostcodeRequest, LookupTownRequest, LookupUPRNRequest}
 
 object AddressLookupRequestsPost extends ServicesConfiguration {
 
@@ -31,9 +31,32 @@ object AddressLookupRequestsPost extends ServicesConfiguration {
       .post(s"$baseUrl/lookup")
       .header(HttpHeaderNames.ContentType, "application/json")
       .body(StringBody(
-        LookupRequest(postcode = Some(s"$${postcode}")).asJsonString()
+        LookupPostcodeRequest(postcode = Some(s"$${postcode}")).asJsonString()
       ))
       .header(HttpHeaderNames.UserAgent, "address-lookup-frontend")
       .check(substring(s"$${postcode}"))
       .check(status.is(200))
+
+  val lookupAddressByUPRN: HttpRequestBuilder =
+    http("POST - Search for address using postcode")
+      .post(s"$baseUrl/lookup/by-uprn")
+      .header(HttpHeaderNames.ContentType, "application/json")
+      .body(StringBody(
+        LookupUPRNRequest(uprn = s"$${uprn}").asJsonString()
+      ))
+      .header(HttpHeaderNames.UserAgent, "address-lookup-frontend")
+      .check(substring(s"$${uprn}"))
+      .check(status.is(200))
+
+  val lookupAddressByTown: HttpRequestBuilder =
+    http("POST - Search for address using postcode")
+      .post(s"$baseUrl/lookup/by-town")
+      .header(HttpHeaderNames.ContentType, "application/json")
+      .body(StringBody(
+        LookupTownRequest(town = s"$${town}", filter = Some(s"$${line-one}")).asJsonString()
+      ))
+      .header(HttpHeaderNames.UserAgent, "address-lookup-frontend")
+      .check(substring(s"$${town}"))
+      .check(status.is(200))
+      .check(jsonPath("$[*]").count.is(session => session("result-count").as[String].toInt))
 }

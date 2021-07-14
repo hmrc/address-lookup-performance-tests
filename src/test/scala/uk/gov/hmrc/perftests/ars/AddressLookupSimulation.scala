@@ -26,8 +26,13 @@ class AddressLookupSimulation extends PerformanceTestRunner {
     AddressLookupRequestsPost.lookupAddressWithFilter
   )
 
-  setup("api-lookup-fuzzy", "Lookup address using fuzzy matching") withRequests
-    AddressLookupRequestsGet.fuzzyAddressLookup
+  setup("api-lookup-fuzzy", "Lookup address using fuzzy matching") withRequests(
+    AddressLookupRequestsGet.fuzzyAddressLookup,
+    AddressLookupRequestsPost.lookupAddressByTown
+  )
+
+  setup("api-lookup-uprn", "Lookup address using fuzzy matching") withRequests
+    AddressLookupRequestsPost.lookupAddressByUPRN
 
   setup("lookup-frontend-manual", "Lookup address frontend (Manual lookup)") withRequests(
     lookupAddressFrontendGetCsrfToken,
