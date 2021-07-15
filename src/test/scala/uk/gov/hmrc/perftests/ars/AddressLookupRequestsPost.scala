@@ -56,7 +56,6 @@ object AddressLookupRequestsPost extends ServicesConfiguration {
         LookupTownRequest(town = s"$${town}", filter = Some(s"$${line-one}")).asJsonString()
       ))
       .header(HttpHeaderNames.UserAgent, "address-lookup-frontend")
-      .check(substring(s"$${town}"))
       .check(status.is(200))
       .check(jsonPath("$[*]").count.is(session => session("result-count").as[String].toInt))
 }
