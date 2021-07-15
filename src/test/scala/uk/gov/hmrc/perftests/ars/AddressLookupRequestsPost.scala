@@ -38,7 +38,7 @@ object AddressLookupRequestsPost extends ServicesConfiguration {
       .check(status.is(200))
 
   val lookupAddressByUPRN: HttpRequestBuilder =
-    http("POST - Search for address using postcode")
+    http("POST - Search for address using UPRN")
       .post(s"$baseUrl/lookup/by-uprn")
       .header(HttpHeaderNames.ContentType, "application/json")
       .body(StringBody(
@@ -49,7 +49,7 @@ object AddressLookupRequestsPost extends ServicesConfiguration {
       .check(status.is(200))
 
   val lookupAddressByTown: HttpRequestBuilder =
-    http("POST - Search for address using postcode")
+    http("POST - Search for address using town")
       .post(s"$baseUrl/lookup/by-town")
       .header(HttpHeaderNames.ContentType, "application/json")
       .body(StringBody(
