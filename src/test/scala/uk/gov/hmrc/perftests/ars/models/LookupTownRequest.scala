@@ -6,7 +6,7 @@ object LookupTownRequest {
   implicit val addressJsonFormat: OFormat[LookupTownRequest] = Json.format[LookupTownRequest]
 }
 
-case class LookupTownRequest(town: String, filter: Option[String] = None) {
+case class LookupTownRequest(posttown: String, filter: Option[String] = None) {
   def asJsonString(): String = {
     Json.toJson(this).toString()
   }

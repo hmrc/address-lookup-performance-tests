@@ -50,10 +50,10 @@ object AddressLookupRequestsPost extends ServicesConfiguration {
 
   val lookupAddressByTown: HttpRequestBuilder =
     http("POST - Search for address using town")
-      .post(s"$baseUrl/lookup/by-town")
+      .post(s"$baseUrl/lookup/by-post-town")
       .header(HttpHeaderNames.ContentType, "application/json")
       .body(StringBody(
-        LookupTownRequest(town = s"$${town}", filter = Some(s"$${line-one}")).asJsonString()
+        LookupTownRequest(posttown = s"$${town}", filter = Some(s"$${line-one}")).asJsonString()
       ))
       .header(HttpHeaderNames.UserAgent, "address-lookup-frontend")
       .check(status.is(200))
