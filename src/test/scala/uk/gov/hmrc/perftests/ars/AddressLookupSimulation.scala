@@ -34,7 +34,7 @@ class AddressLookupSimulation extends PerformanceTestRunner {
   setup("api-lookup-uprn", "Lookup address using UPRN matching") withRequests
     AddressLookupRequestsPost.lookupAddressByUPRN
 
-  setup("lookup-frontend-manual", "Lookup address frontend (Manual lookup)") withRequests(
+  setup("lookup-frontend-manual", "Lookup address frontend (Manual entry)") withRequests(
     lookupAddressFrontendGetCsrfToken,
     lookupAddressFrontendStartJourney,
     lookupAddressFrontendLookupPage,
