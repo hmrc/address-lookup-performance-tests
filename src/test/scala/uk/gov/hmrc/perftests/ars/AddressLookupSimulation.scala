@@ -22,12 +22,10 @@ import uk.gov.hmrc.perftests.alf.AddressLookupFrontendRequests.{lookupAddressFro
 class AddressLookupSimulation extends PerformanceTestRunner {
 
   setup("api-lookup-postcode", "Lookup address with postcode and filter") withRequests(
-    AddressLookupRequestsGet.lookupAddressWithFilter,
     AddressLookupRequestsPost.lookupAddressWithFilter
   )
 
   setup("api-lookup-fuzzy", "Lookup address using fuzzy/town matching") withRequests(
-    AddressLookupRequestsGet.fuzzyAddressLookup,
     AddressLookupRequestsPost.lookupAddressByTown
   )
 
