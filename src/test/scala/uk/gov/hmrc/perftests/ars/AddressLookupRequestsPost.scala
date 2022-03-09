@@ -20,7 +20,7 @@ import io.gatling.core.Predef._
 import io.gatling.http.Predef._
 import io.gatling.http.request.builder.HttpRequestBuilder
 import uk.gov.hmrc.performance.conf.ServicesConfiguration
-import uk.gov.hmrc.perftests.ars.models.{LookupPostcodeRequest, LookupTownRequest, LookupUPRNRequest}
+import uk.gov.hmrc.perftests.ars.models.{LookupInternationalRequest, LookupPostcodeRequest, LookupTownRequest, LookupUPRNRequest}
 
 object AddressLookupRequestsPost extends ServicesConfiguration {
 
@@ -54,6 +54,17 @@ object AddressLookupRequestsPost extends ServicesConfiguration {
       .header(HttpHeaderNames.ContentType, "application/json")
       .body(StringBody(
         LookupTownRequest(posttown = s"$${town}", filter = Some(s"$${line-one}")).asJsonString()
+      ))
+      .header(HttpHeaderNames.UserAgent, "address-lookup-frontend")
+      .check(status.is(200))
+      .check(jsonPath("$[*]").count.is(session => session("result-count").as[String].toInt))
+
+  val lookupInternationalAddress: HttpRequestBuilder =
+    http("POST - Search for international")
+      .post(s"$baseUrl/country/BM/lookup")
+      .header(HttpHeaderNames.ContentType, "application/json")
+      .body(StringBody(
+        LookupInternationalRequest(s"$${filter}").asJsonString()
       ))
       .header(HttpHeaderNames.UserAgent, "address-lookup-frontend")
       .check(status.is(200))

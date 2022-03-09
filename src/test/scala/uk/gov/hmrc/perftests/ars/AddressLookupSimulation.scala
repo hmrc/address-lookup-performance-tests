@@ -29,6 +29,10 @@ class AddressLookupSimulation extends PerformanceTestRunner {
     AddressLookupRequestsPost.lookupAddressByTown
   )
 
+  setup("api-lookup-international", "Lookup international address") withRequests(
+    AddressLookupRequestsPost.lookupInternationalAddress
+    )
+
   setup("api-lookup-uprn", "Lookup address using UPRN matching") withRequests
     AddressLookupRequestsPost.lookupAddressByUPRN
 
