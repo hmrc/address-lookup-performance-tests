@@ -17,33 +17,38 @@
 package uk.gov.hmrc.perftests.ars
 
 import uk.gov.hmrc.performance.simulation.PerformanceTestRunner
-import uk.gov.hmrc.perftests.alf.AddressLookupFrontendRequests.{lookupAddressFrontendSelectFirstAddress, _}
+import uk.gov.hmrc.perftests.alf.AddressLookupFrontendRequests._
 
 class AddressLookupSimulation extends PerformanceTestRunner {
 
-  setup("api-lookup-postcode", "Lookup address with postcode and filter") withRequests(
-    AddressLookupRequestsPost.lookupAddressWithFilter
-  )
-
-  setup("api-lookup-fuzzy", "Lookup address using fuzzy/town matching") withRequests(
-    AddressLookupRequestsPost.lookupAddressByTown
-  )
-
-  setup("api-lookup-international", "Lookup international address") withRequests(
-    AddressLookupRequestsPost.lookupInternationalAddress
+  setup("api-lookup-postcode", "Lookup address with postcode and filter")
+    .withRequests(
+      AddressLookupRequestsPost.lookupAddressWithFilter
     )
 
-  setup("api-lookup-uprn", "Lookup address using UPRN matching") withRequests
-    AddressLookupRequestsPost.lookupAddressByUPRN
+  setup("api-lookup-fuzzy", "Lookup address using fuzzy/town matching")
+    .withRequests(
+      AddressLookupRequestsPost.lookupAddressByTown
+    )
+  setup("api-lookup-international", "Lookup international address")
+    .withRequests(
+      AddressLookupRequestsPost.lookupInternationalAddress
+    )
 
-  setup("lookup-frontend-manual", "Lookup address frontend (Manual entry)") withRequests(
-    lookupAddressFrontendGetCsrfToken,
-    lookupAddressFrontendStartJourney,
-    lookupAddressFrontendLookupPage,
-    lookupAddressFrontendManualAddress,
-    lookupAddressFrontendSubmitManualAddress,
-    lookupAddressFrontendConfirmAddress
-  )
+  setup("api-lookup-uprn", "Lookup address using UPRN matching")
+    .withRequests(
+      AddressLookupRequestsPost.lookupAddressByUPRN
+    )
+
+  setup("lookup-frontend-manual", "Lookup address frontend (Manual entry)")
+    .withRequests(
+      lookupAddressFrontendGetCsrfToken,
+      lookupAddressFrontendStartJourney,
+      lookupAddressFrontendLookupPage,
+      lookupAddressFrontendManualAddress,
+      lookupAddressFrontendSubmitManualAddress,
+      lookupAddressFrontendConfirmAddress
+    )
 
   setup("lookup-frontend", "Lookup address frontend (Postcode search)")
     .withRequests(
