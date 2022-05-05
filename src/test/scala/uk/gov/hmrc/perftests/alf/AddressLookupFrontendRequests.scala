@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ object AddressLookupFrontendRequests extends ServicesConfiguration {
 
   val postcode = "FX1 7RR"
 
-  val defaultConfigurationMap = Map(
+  val defaultConfigurationMap: Map[String, String] = Map(
     "journeyConfig" ->
       s"""
          |{
@@ -41,7 +41,7 @@ object AddressLookupFrontendRequests extends ServicesConfiguration {
          |""".stripMargin,
     "continue" -> "")
 
-  val manualAddress = Map("line1" -> "Test street", "line2" -> "Somewhere test", "line3" -> "", "town" -> "Test town", "postcode" -> postcode, "countryCode" -> "GB")
+  val manualAddress: Map[String, String] = Map("line1" -> "Test street", "line2" -> "Somewhere test", "line3" -> "", "town" -> "Test town", "postcode" -> postcode, "countryCode" -> "GB")
 
   val lookupAddressFrontendGetCsrfToken: HttpRequestBuilder =
     http("Get CSRF Token")
@@ -53,7 +53,18 @@ object AddressLookupFrontendRequests extends ServicesConfiguration {
     http("Start journey")
       .post(s"$baseUrl/lookup-address/test-only/v2/test-setup")
       .formParamMap(defaultConfigurationMap ++ Map("csrfToken" -> s"$${csrfToken}"))
-      .check(headerRegex("Location", "(.*)/lookup").saveAs("alfBaseURL"))
+      .check(headerRegex("Location", "(.*)/begin").saveAs("alfBaseURL"))
+      .check(status.is(303))
+
+  val lookupAddressFrontendCountryPickerPage: HttpRequestBuilder =
+    http("Load country picker page")
+      .get(s"$${alfBaseURL}/country-picker")
+      .check(status.is(200))
+
+  val lookupAddressFrontendSelectCountry: HttpRequestBuilder =
+    http("Select country")
+      .post(s"$${alfBaseURL}/country-picker")
+      .formParamMap(Map("countryCodeAutocomplete" -> "United Kingdom", "countryCode" -> "GB", "csrfToken" -> s"$${csrfToken}"))
       .check(status.is(303))
 
   val lookupAddressFrontendLookupPage: HttpRequestBuilder =
