@@ -35,6 +35,9 @@ object AddressLookupFrontendRequests extends ServicesConfiguration {
          |  "version" : 2,
          |  "options" : {
          |    "continueUrl" : "This will be ignored"
+         |    "selectPageConfig" : {
+         |      "proposalListLimit" : 300
+         |    }
          |  },
          |  "labels" : {}
          |}
