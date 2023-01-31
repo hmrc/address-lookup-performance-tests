@@ -47,11 +47,11 @@ sm --start ADDRESS_LOOKUP_SERVICES -r --appendArgs '{
 
 A couple of scripts have been created to make it easier to run the tests locally they are as follows:
 
-#### Frontend Performance Tests
+#### API Performance Tests
 
 ```./run-local.sh```
 
-#### API Performance Tests
+#### Frontend Performance Tests
 
 ```./run-frontend-local.sh```
 
