@@ -3,7 +3,6 @@ lazy val root = (project in file("."))
   .enablePlugins(CorePlugin)
   .enablePlugins(JvmPlugin)
   .enablePlugins(IvyPlugin)
-  .enablePlugins(SbtAutoBuildPlugin)
   .settings(
     organization := "uk.gov.hmrc",
     name := "address-lookup-performance-tests",
