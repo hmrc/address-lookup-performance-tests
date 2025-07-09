@@ -37,11 +37,13 @@ docker run --rm --name mongodb -p 27017-27019:27017-27019 mongo:4
 To start the services up with service manager:
 
 ```
-sm --start ADDRESS_LOOKUP_SERVICES -r --appendArgs '{  
+sm2 --start ADDRESS_LOOKUP_SERVICES -r --appendArgs '{  
+        "ADDRESS_LOOKUP":[                                                                           
+            "-J-Dmicroservice.services.access-control.allow-list.0=address-lookup-frontend"
+        ],
         "ADDRESS_LOOKUP_FRONTEND":[
-            "-J-Dapplication.router=testOnlyDoNotUseInAppConf.Routes",              
-            "-J-Dmicroservice.hosts.allowList.1=localhost"                                      
-        ]                                                                           
+            "-J-Dapplication.router=testOnlyDoNotUseInAppConf.Routes"                                    
+        ]
     }'    
 ```
 
