@@ -7,4 +7,4 @@ sbt gatling:test \
   -DrunLocal=${LOCAL} \
   -Dperftest.runSmokeTest=${SMOKE} \
   -DjourneysToRun.0=address-lookup-frontend \
-  -Djourneys.address-lookup-frontend.feeder=data/stubbed/postcodes.csv
+  -Djourneys.address-lookup-frontend.feeder=data/local/postcodes.csv

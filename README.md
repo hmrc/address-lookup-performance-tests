@@ -6,7 +6,7 @@ Performance test repository for address-lookup service
 
 This repository contains tests for both the backend and frontend service for address-lookup. The default journey runs the backend service.
 
-## Running locally
+## Running Tests
 
 ### Prerequisites
 
@@ -27,14 +27,34 @@ Start dependent microservices using the following shell script:
   ./start_services.sh
 ```
 
+### Test Data
+
+The performance tests use "feeder" files to generate test data for the Gatling journeys. There are two sets of feeder files:
+
+- Local data (for the canned/stubbed test data held in `address-search-api`)
+  - [data/local/postcodes.csv](src/test/resources/data/local/postcodes.csv) 
+  - [data/local/international.csv](src/test/resources/data/local/international.csv) 
+  - [data/local/uprn.csv](src/test/resources/data/local/uprn.csv) 
+  - [data/local/fuzzy.csv](src/test/resources/data/local/fuzzy.csv) 
+
+
+- Staging data (for the test data held within the Staging environment)
+  - [data/staging/postcodes.csv](src/test/resources/data/staging/postcodes.csv)
+  - [data/staging/international.csv](src/test/resources/data/staging/international.csv)
+  - [data/staging/uprn.csv](src/test/resources/data/staging/uprn.csv)
+  - [data/staging/fuzzy.csv](src/test/resources/data/staging/fuzzy.csv)
+
+
 ### Smoke test
 
 There are two separate scripts for running the smoke tests, one for the backend service and one for the frontend service.
 
+**Note:** It is important to use these scripts locally as they specify separate local journeys which use separate feeder files for the test data.
+
 #### API Performance Tests
 To run the smoke tests on the backend, use the following script:
 ```shell
-    ./run-local.sh
+    ./run-api-local.sh
 ```
 #### Frontend Performance Tests
 To run the smoke tests on the frontend, use the following script:
