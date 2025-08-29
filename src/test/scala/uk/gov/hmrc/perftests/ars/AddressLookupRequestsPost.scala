@@ -31,10 +31,10 @@ object AddressLookupRequestsPost extends ServicesConfiguration {
       .post(s"$baseUrl/lookup")
       .header(HttpHeaderNames.ContentType, "application/json")
       .body(StringBody(
-        LookupPostcodeRequest(postcode = Some(s"$${postcode}")).asJsonString()
+        LookupPostcodeRequest(postcode = Some("#{postcode}")).asJsonString()
       ))
       .header(HttpHeaderNames.UserAgent, "address-lookup-frontend")
-      .check(substring(s"$${postcode}"))
+      .check(substring("#{postcode}"))
       .check(status.is(200))
 
   val lookupAddressByUPRN: HttpRequestBuilder =
@@ -42,10 +42,10 @@ object AddressLookupRequestsPost extends ServicesConfiguration {
       .post(s"$baseUrl/lookup/by-uprn")
       .header(HttpHeaderNames.ContentType, "application/json")
       .body(StringBody(
-        LookupUPRNRequest(uprn = s"$${uprn}").asJsonString()
+        LookupUPRNRequest(uprn = "#{uprn}").asJsonString()
       ))
       .header(HttpHeaderNames.UserAgent, "address-lookup-frontend")
-      .check(substring(s"$${uprn}"))
+      .check(substring("#{uprn}"))
       .check(status.is(200))
 
   val lookupAddressByTown: HttpRequestBuilder =
@@ -53,7 +53,7 @@ object AddressLookupRequestsPost extends ServicesConfiguration {
       .post(s"$baseUrl/lookup/by-post-town")
       .header(HttpHeaderNames.ContentType, "application/json")
       .body(StringBody(
-        LookupTownRequest(posttown = s"$${town}", filter = Some(s"$${line-one}")).asJsonString()
+        LookupTownRequest(posttown = "#{town}", filter = Some("#{line-one}")).asJsonString()
       ))
       .header(HttpHeaderNames.UserAgent, "address-lookup-frontend")
       .check(status.is(200))
@@ -64,7 +64,7 @@ object AddressLookupRequestsPost extends ServicesConfiguration {
       .post(s"$baseUrl/country/BM/lookup")
       .header(HttpHeaderNames.ContentType, "application/json")
       .body(StringBody(
-        LookupInternationalRequest(s"$${filter}").asJsonString()
+        LookupInternationalRequest("#{filter}").asJsonString()
       ))
       .header(HttpHeaderNames.UserAgent, "address-lookup-frontend")
       .check(status.is(200))

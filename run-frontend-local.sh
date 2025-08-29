@@ -1,11 +1,10 @@
 #!/usr/bin/env bash
 
-SMOKE_TEST=true
-FULL=$1
+SMOKE=${1:-true}
+LOCAL=${2:-true}
 
-if [ -z "$FULL" ]; then
-  echo "boolean value not set, defaulting to Smoke Test: $SMOKE_TEST"
-  echo ""
-fi
-
-sbt -Dperftest.runSmokeTest=${FULL:=$SMOKE_TEST} -DrunLocal=true -DjourneysToRun.0=address-lookup-frontend gatling:test
+sbt gatling:test \
+  -DrunLocal=${LOCAL} \
+  -Dperftest.runSmokeTest=${SMOKE} \
+  -DjourneysToRun.0=address-lookup-frontend \
+  -Djourneys.address-lookup-frontend.feeder=data/local/postcodes.csv

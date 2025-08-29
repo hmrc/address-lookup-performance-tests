@@ -20,31 +20,12 @@ import io.gatling.core.Predef._
 import io.gatling.core.structure.ChainBuilder
 import io.gatling.http.Predef._
 import io.gatling.http.request.builder.HttpRequestBuilder
+import play.api.libs.json.Json
 import uk.gov.hmrc.performance.conf.ServicesConfiguration
 
 object AddressLookupFrontendRequests extends ServicesConfiguration {
 
   val baseUrl: String = baseUrlFor("address-lookup-frontend-service")
-
-  val postcode = "FX1 7RR"
-
-  val defaultConfigurationMap: Map[String, String] = Map(
-    "journeyConfig" ->
-      s"""
-         |{
-         |  "version" : 2,
-         |  "options" : {
-         |    "continueUrl" : "This will be ignored",
-         |    "selectPageConfig" : {
-         |      "proposalListLimit" : 300
-         |    }
-         |  },
-         |  "labels" : {}
-         |}
-         |""".stripMargin,
-    "continue" -> "")
-
-  val manualAddress: Map[String, String] = Map("line1" -> "Test street", "line2" -> "Somewhere test", "line3" -> "", "town" -> "Test town", "postcode" -> postcode, "countryCode" -> "GB")
 
   val lookupAddressFrontendGetCsrfToken: HttpRequestBuilder =
     http("Get CSRF Token")
@@ -55,29 +36,42 @@ object AddressLookupFrontendRequests extends ServicesConfiguration {
   val lookupAddressFrontendStartJourney: HttpRequestBuilder =
     http("Start journey")
       .post(s"$baseUrl/lookup-address/test-only/v2/test-setup")
-      .formParamMap(defaultConfigurationMap ++ Map("csrfToken" -> s"$${csrfToken}"))
+      .formParamMap(Map(
+        "csrfToken" -> "#{csrfToken}",
+        "continue" -> "",
+        "journeyConfig" -> Json.obj(
+          "version" -> 2,
+          "options" -> Json.obj(
+            "continueUrl" -> "This will be ignored",
+            "selectPageConfig" -> Json.obj(
+              "proposalListLimit" -> 300
+            )
+          ),
+          "labels" -> Json.obj()
+        ).toString()
+      ))
       .check(headerRegex("Location", "(.*)/begin").saveAs("alfBaseURL"))
       .check(status.is(303))
 
   val lookupAddressFrontendCountryPickerPage: HttpRequestBuilder =
     http("Load country picker page")
-      .get(s"$${alfBaseURL}/country-picker")
+      .get("#{alfBaseURL}/country-picker")
       .check(status.is(200))
 
   val lookupAddressFrontendSelectCountry: HttpRequestBuilder =
     http("Select country")
-      .post(s"$${alfBaseURL}/country-picker")
-      .formParamMap(Map("countryCodeAutocomplete" -> "United Kingdom", "countryCode" -> "GB", "csrfToken" -> s"$${csrfToken}"))
+      .post("#{alfBaseURL}/country-picker")
+      .formParamMap(Map("countryCodeAutocomplete" -> "United Kingdom", "countryCode" -> "GB", "csrfToken" -> "#{csrfToken}"))
       .check(status.is(303))
 
   val lookupAddressFrontendLookupPage: HttpRequestBuilder =
     http("Load lookup page")
-      .get(s"$${alfBaseURL}/lookup")
+      .get("#{alfBaseURL}/lookup")
       .check(status.is(200))
 
   val lookupAddressFrontendSearchForPostcode: HttpRequestBuilder =
     http("Search for postcode")
-      .get(s"$${alfBaseURL}/select?csrfToken=$${csrfToken}&postcode=$${postcode}")
+      .get("#{alfBaseURL}/select?csrfToken=#{csrfToken}&postcode=#{postcode}")
       .check(status.in(200, 303))
       .check(
         checkIf((response: Response, _) => response.status.code() == 200)
@@ -87,25 +81,35 @@ object AddressLookupFrontendRequests extends ServicesConfiguration {
   def lookupAddressFrontendSelectFirstAddress: ChainBuilder =
     doIf(session => session.contains("addressId")) {
       exec(http("Select first address")
-        .post(s"$${alfBaseURL}/select?postcode=$${postcode}")
-        .formParamMap(Map("addressId" -> s"$${addressId}", "csrfToken" -> s"$${csrfToken}"))
+        .post("#{alfBaseURL}/select?postcode=#{postcode}")
+        .formParamMap(Map("addressId" -> "#{addressId}", "csrfToken" -> "#{csrfToken}"))
         .check(status.is(303)))
     }
 
   val lookupAddressFrontendManualAddress: HttpRequestBuilder =
     http("Manually enter address")
-      .get(s"$${alfBaseURL}/edit")
+      .get("#{alfBaseURL}/edit")
       .check(status.is(200))
 
   val lookupAddressFrontendSubmitManualAddress: HttpRequestBuilder =
     http("Submit manually entered address")
-      .post(s"$${alfBaseURL}/edit?uk=false")
-      .formParamMap(manualAddress ++ Map("csrfToken" -> s"$${csrfToken}"))
+      .post("#{alfBaseURL}/edit?uk=false")
+      .formParamMap(
+        Map(
+          "csrfToken" -> "#{csrfToken}",
+          "line1" -> "Test street",
+          "line2" -> "Somewhere test",
+          "line3" -> "",
+          "town" -> "Test town",
+          "postcode" -> "FX1 7RR",
+          "countryCode" -> "GB"
+        )
+      )
       .check(status.is(303))
 
   val lookupAddressFrontendConfirmAddress: HttpRequestBuilder =
     http("Confirm manually entered address")
-      .post(s"$${alfBaseURL}/confirm")
-      .formParamMap(Map("csrfToken" -> s"$${csrfToken}"))
+      .post("#{alfBaseURL}/confirm")
+      .formParamMap(Map("csrfToken" -> "#{csrfToken}"))
       .check(status.is(303))
 }
