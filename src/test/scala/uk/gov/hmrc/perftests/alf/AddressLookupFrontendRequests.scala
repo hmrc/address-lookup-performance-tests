@@ -50,7 +50,7 @@ object AddressLookupFrontendRequests extends ServicesConfiguration {
           "labels" -> Json.obj()
         ).toString()
       ))
-      .check(headerRegex("Location", "(.*)/begin").saveAs("alfBaseURL"))
+      .check(headerRegex(session => "Location", "(.*)/begin").saveAs("alfBaseURL"))
       .check(status.is(303))
 
   val lookupAddressFrontendCountryPickerPage: HttpRequestBuilder =
