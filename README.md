@@ -27,6 +27,18 @@ Start dependent microservices using the following shell script:
   ./start_services.sh
 ```
 
+### Current Volumetrics (JPS config)
+
+> Last checked/updated: **2026-02-23**
+> 
+> Based on a profile of the service in production over the past year, the max requests/minute is ~350.
+
+The following configuration of journeys per second (JPS) results in around ~1500 requests/minute, which is a good level for testing the performance of the service without overwhelming it. It also provides us with more than enough headroom.
+
+- Address Search: **6 JPS**
+- International: **3 JPS**
+- Manual Entry: **1 JPS**
+
 ### Test Data
 
 The performance tests use "feeder" files to generate test data for the Gatling journeys. There are two sets of feeder files:
